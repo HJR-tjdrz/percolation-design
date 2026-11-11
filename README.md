@@ -1,2 +1,144 @@
 # percolation-design
-Reference implementation of the soft-core continuum percolation engine and cost-optimal design workflow (ICCMS 2027). Includes full source, 14 unit tests, drivers, and all paper result files to regenerate figures instantly. Full reproduction takes ~1.5 CPU-hours (single-core)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24112305.svg)](https://doi.org/10.5281/zenodo.24112305)
+
+**Monte Carlo percolation engine and cost-optimal design code for binary conductive filler blends.**
+
+This is the reference implementation for the paper
+
+> *Target-Probability Calibration for In-Cell Percolation Design of Binary Conductive Filler Blends*
+> (submitted to ICCMS 2027)
+
+It answers a practical question: given two conductive fillers with different shapes and prices, and a
+cell that must conduct with probability *p* between two electrodes, what mixture minimises material
+cost? Because the percolation probability has no closed form, the constraint is estimated by Monte
+Carlo, and the code here both measures it and turns it into a linear constraint that can be solved
+exactly.
+
+Everything the paper claims can be re-derived from the files in `results/` and `data/supplement/`
+without re-running a single simulation. See [`docs/REPRODUCING.md`](docs/REPRODUCING.md).
+
+---
+
+## What is in the box
+
+| Path | Contents |
+|---|---|
+| `src/percolation/` | the engine: geometry kernels, contact graph, boundary treatment, estimator |
+| `src/percolation/tests/` | 14 unit tests, including a kernel check against a scalar reference |
+| `tools/run_experiments.py` | the E1–E5 experiment drivers |
+| `tools/run_supplement.py` | the reviewer-requested B1–B3 experiments |
+| `tools/summarize.py` | turns the raw JSONL into `results/numbers.json` / `numbers.md` |
+| `tools/make_figures.py` | every figure in the paper |
+| `tools/make_supplement_figures.py` | the supplement figures |
+| `tools/fit.py` | logistic fit, level sets, parametric bootstrap |
+| `tools/check_numbers.py` | arithmetic cross-checks of the cost and geometry constants (diagnostic output in Chinese) |
+| `results/` | raw simulation output quoted in the paper |
+| `data/supplement/` | rod thickness, tunnelling cut-off and sphere boundary scans |
+| `docs/` | model description and reproduction guide |
+
+## Requirements
+
+Python 3.9+ with NumPy, SciPy and Matplotlib. No GPU, no compiled extensions, no CUDA.
+
+```bash
+pip install -r requirements.txt
+```
+
+The whole paper runs on one CPU core in about **1.5 CPU-hours**; the largest single experiment is
+26 CPU-minutes.
+
+## Quick start
+
+```python
+import sys; sys.path.insert(0, "src")
+from percolation import Model, estimate
+
+model = Model(L=10_000.0)                      # 10 um cell, periodic laterals, clipped electrodes
+est = estimate(model, phi_rod=0.00753, n_runs=200, seed=1)
+print(est.p_hat, est.ci_low, est.ci_high)      # ~0.91 [0.86, 0.94]
+```
+
+Reproduce the headline numbers from the stored data (takes about a second):
+
+```bash
+python tools/summarize.py
+```
+
+Check that the manuscript still agrees with the result files:
+
+```bash
+python tools/check_numbers.py
+```
+
+Run the test suite:
+
+```bash
+python src/percolation/tests/run_tests.py
+```
+
+## The model in one paragraph
+
+A 10 µm cube sits between two electrodes. Filler A is a spherocylinder (5 µm long, 30 nm radius,
+aspect ratio 83), filler B a sphere (200 nm radius). Centres are uniform and orientations isotropic,
+overlap is allowed (soft cores). Two particles are electrically connected when their surface-to-surface
+distance is at most a tunnelling cut-off δ = 1.8 nm, which reduces to segment–segment,
+point–segment and point–point distances minus the radii. Connectivity between the electrodes is
+tested with a union-find on the contact graph. The 90 % thresholds of the two pure fillers are
+measured in the same cell by the same engine, which turns the probabilistic constraint into
+
+```
+v_A / v_A*(0.9) + v_B / v_B*(0.9) >= 1
+```
+
+and the design problem into a linear programme whose optimum is a corner. A dimensionless ratio
+Λ = c_A v_A*(p) / (c_B v_B*(p)) decides which corner. See [`docs/MODEL.md`](docs/MODEL.md) for the
+full derivation, the boundary-convention discussion and the known limitations.
+
+## Headline results
+
+| Quantity | Value |
+|---|---|
+| Rod 90 % threshold, 10 µm cell | 0.753 vol % [0.750, 0.759] |
+| Sphere 90 % threshold, 10 µm cell | 35.4 vol % |
+| Cost ratio Λ at c_A/c_B = 21 | 0.45–0.50, so pure rods win |
+| 90 % threshold vs lateral convention | 0.755 (periodic) vs 0.877 vol % (insulating) |
+| 90 % threshold vs cell thickness | moves 2.3 % over 1.2–2.0 rod lengths |
+| 90 % threshold vs tunnelling cut-off | moves 2.1 % over δ = 1.0–3.0 nm |
+
+## Reproducibility notes
+
+* Every random draw is seeded; the seed is written into each result record.
+* Result files are append-only JSONL, so an interrupted run resumes with `--resume`.
+* `results/numbers.md` is the single source of truth for the numbers quoted in the manuscript; the
+  paper text is checked against it by `tools/check_numbers.py`.
+* Figures are regenerated byte-for-byte from the stored result files, not from memory.
+
+## Citing
+
+If you use this code, please cite the paper; see [`CITATION.cff`](CITATION.cff).
+
+The archived release is on Zenodo: [https://doi.org/10.5281/zenodo.24112305](https://doi.org/10.5281/zenodo.24112305) (DOI `10.5281/zenodo.24112305`).
+
+## License
+
+MIT. See [`LICENSE`](LICENSE).
+
+## 中文简介
+
+本仓库是论文《面向单元内渗流设计的二元导电填料共混目标概率校准》的配套代码，包含：
+
+* **蒙特卡洛逾渗引擎**——10 µm 立方腔体、两类填料、接触判据、并查集连通性、两种边界约定；
+* **实验脚本**——纯填料阈值曲线、边界敏感性、二维配比扫描、等值线验证；
+* **分析脚本**——logistic 拟合、Wilson 区间、参数化 bootstrap、线性规划与设计图；
+* **全部原始数据**——论文里每个数字都能在 `results/` 里查到，不需要重跑。
+
+快速验证：
+
+```bash
+pip install -r requirements.txt
+python tools/summarize.py        # 复现论文里的关键数字
+python src/percolation/tests/run_tests.py   # 跑单元测试
+```
+
+模型细节见 `docs/MODEL.md`，复现指南见 `docs/REPRODUCING.md`。

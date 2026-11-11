@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper listed below."
+title: "percolation-design: Monte Carlo percolation engine and cost-optimal design code for binary conductive filler blends"
+abstract: >-
+  Reference implementation of a soft-core continuum percolation engine for
+  mixed spherocylinder/sphere systems in a thin cell between two electrodes,
+  together with the calibration, surrogate-constraint and cost-optimisation
+  workflow described in the accompanying paper.
+type: software
+license: MIT
+version: 1.0.0
+date-released: "2026-11-11"
+
+authors:
+  - family-names: "Huang"
+    given-names: "Jirui"
+  - family-names: "Feng"
+    given-names: "Jiateng"
+  - family-names: "Luo"
+    given-names: "Sisi"
+
+# Remaining TODO: add ORCID iDs for each author.
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24112305"
+    description: "Archived release v1.0.0"
+  - type: url
+    value: "https://doi.org/10.5281/zenodo.24112305"
+    description: "Concept DOI landing page"
+
+references:
+  - type: article
+    title: "Target-Probability Calibration for In-Cell Percolation Design of Binary Conductive Filler Blends"
+    authors:
+      - family-names: "Huang"
+        given-names: "Jirui"
+      - family-names: "Feng"
+        given-names: "Jiateng"
+      - family-names: "Luo"
+        given-names: "Sisi"
+    conference:
+      name: "19th International Conference on Computer Modeling and Simulation (ICCMS 2027)"
+    year: 2027
+    notes: "Manuscript submitted; update with the proceedings DOI once published."

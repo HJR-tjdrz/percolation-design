@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "percolation-design"
+version = "1.0.0"
+description = "Monte Carlo percolation engine and cost-optimal design code for binary conductive filler blends"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+    { name = "Jirui Huang" },
+    { name = "Jiateng Feng" },
+    { name = "Sisi Luo" },
+]
+dependencies = [
+    "numpy>=1.21",
+    "scipy>=1.7",
+    "matplotlib>=3.4",
+]
+keywords = ["percolation", "monte-carlo", "conductive-composites", "optimisation"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[project.urls]
+Documentation = "https://github.com/OWNER/percolation-design/blob/main/docs/MODEL.md"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

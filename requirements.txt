@@ -1,0 +1,6 @@
+# Requirements for percolation-design
+# Python 3.9 or newer. No GPU, no compiled extensions.
+
+numpy>=1.21
+scipy>=1.7
+matplotlib>=3.4

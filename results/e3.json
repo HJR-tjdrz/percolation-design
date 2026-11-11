@@ -1,0 +1,80 @@
+{
+ "rows": [
+  {
+   "n_rod": 100,
+   "seconds_per_sim": 0.00355221,
+   "reps": 20,
+   "impl": "new"
+  },
+  {
+   "n_rod": 200,
+   "seconds_per_sim": 0.012138330000000008,
+   "reps": 10,
+   "impl": "new"
+  },
+  {
+   "n_rod": 400,
+   "seconds_per_sim": 0.043853619999999996,
+   "reps": 5,
+   "impl": "new"
+  },
+  {
+   "n_rod": 600,
+   "seconds_per_sim": 0.10648116666666667,
+   "reps": 3,
+   "impl": "new"
+  },
+  {
+   "n_rod": 800,
+   "seconds_per_sim": 0.18737790000000007,
+   "reps": 3,
+   "impl": "new"
+  },
+  {
+   "n_rod": 1200,
+   "seconds_per_sim": 0.41975213333333333,
+   "reps": 3,
+   "impl": "new"
+  },
+  {
+   "n_rod": 1600,
+   "seconds_per_sim": 0.7960329333333335,
+   "reps": 3,
+   "impl": "new"
+  },
+  {
+   "n_rod": 100,
+   "seconds_per_sim": 0.022693787500000062,
+   "reps": 8,
+   "impl": "legacy"
+  },
+  {
+   "n_rod": 200,
+   "seconds_per_sim": 0.08541892499999992,
+   "reps": 4,
+   "impl": "legacy"
+  },
+  {
+   "n_rod": 400,
+   "seconds_per_sim": 0.3587345666666663,
+   "reps": 3,
+   "impl": "legacy"
+  },
+  {
+   "n_rod": 600,
+   "seconds_per_sim": 0.7586075333333332,
+   "reps": 3,
+   "impl": "legacy"
+  },
+  {
+   "n_rod": 800,
+   "seconds_per_sim": 1.3567807333333335,
+   "reps": 3,
+   "impl": "legacy"
+  }
+ ],
+ "model": {
+  "L": 10000.0,
+  "lateral": "periodic"
+ }
+}
